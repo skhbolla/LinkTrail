@@ -1,0 +1,33 @@
+services:
+  dynamodb-local:
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "${DDB_LOCAL_PORT}:8000"
+    working_dir: /home/dynamodblocal
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    restart: always
+    volumes:
+      - "./data:/home/dynamodblocal/data"
+
+  dynamodb-admin: 
+    image: "aaronshaf/dynamodb-admin"
+    container_name: dynamodb-admin
+    ports:
+      - "${DDB_ADMIN_PORT}:8001"
+    depends_on:
+      - dynamodb-local
+    restart: always 
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
+
+  backend:
+    build: ../backend
+    container_name: backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "${BACKEND_PORT}:8000"
+    volumes:
+      - ../backend:/app               # Mount local code into container instead of baking it into image 
+    depends_on:
+      - dynamodb-local
