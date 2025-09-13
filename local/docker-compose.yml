@@ -29,5 +29,7 @@ services:
       - "${BACKEND_PORT}:8000"
     volumes:
       - ../backend:/app               # Mount local code into container instead of baking it into image 
+    env_file:
+      - ./.env
     depends_on:
       - dynamodb-local
