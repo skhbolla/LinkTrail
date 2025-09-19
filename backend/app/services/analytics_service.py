@@ -2,24 +2,24 @@ from datetime import datetime
 from collections import Counter, defaultdict
 from app.core.db import links_table, clicks_table
 
-def get_analytics(short_id: str, secret_key: str) -> dict:
+def get_analytics(short_code: str, analytics_secret: str) -> dict:
     """
     Fetch analytics for a short URL if secret_key is valid.
     Returns total clicks and clicks per day/hour.
     """
     # 1️⃣ Validate secret key
-    resp = links_table.get_item(Key={"short_id": short_id})
+    resp = links_table.get_item(Key={"short_code": short_code})
     link_item = resp.get("Item")
     if not link_item:
         raise ValueError("Short URL not found")
     
-    if link_item["secret_key"] != secret_key:
+    if link_item["analytics_secret"] != analytics_secret:
         raise ValueError("Invalid secret key")
 
     # 2️⃣ Fetch click logs
     resp = clicks_table.query(
-        KeyConditionExpression="short_id = :sid",
-        ExpressionAttributeValues={":sid": short_id}
+        KeyConditionExpression="short_code = :sid",
+        ExpressionAttributeValues={":sid": short_code}
     )
     clicks = resp.get("Items", [])
 
@@ -38,7 +38,7 @@ def get_analytics(short_id: str, secret_key: str) -> dict:
         clicks_by_hour[hour] += 1
 
     return {
-        "short_id": short_id,
+        "short_code": short_code,
         "total_clicks": total_clicks,
         "clicks_by_day": dict(clicks_by_day),
         "clicks_by_hour": dict(clicks_by_hour)

@@ -11,7 +11,4 @@ class Settings:
     # AWS configuration
     AWS_REGION = os.getenv("AWS_REGION")
 
-    # Base URL for generating full URLs
-    BASE_URL = os.getenv("BASE_URL")
-
 settings = Settings()

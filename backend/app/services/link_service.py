@@ -14,29 +14,25 @@ def generate_secret_key() -> str:
     """Generate a UUID-based secret key for analytics"""
     return str(uuid.uuid4())
 
-def create_short_url(long_url: str) -> tuple[str, str]:
+def create_short_code(long_url: str) -> tuple[str, str]:
     """
-    Creates a new short URL entry in DynamoDB.
+    Creates a new short code and analytics secret entry in DynamoDB.
 
     Returns:
-        short_url, analytics_url
+        short_code, analytics_secret
     """
-    short_id = generate_short_id()
-    secret_key = generate_secret_key()
+    short_code = generate_short_id()
+    analytics_secret = generate_secret_key()
     created_at = datetime.utcnow().isoformat()
 
     # Store in DynamoDB
     links_table.put_item(
         Item={
-            "short_id": short_id,
+            "short_code": short_code,
             "long_url": long_url,
-            "secret_key": secret_key,
+            "analytics_secret": analytics_secret,
             "created_at": created_at,
         }
     )
 
-    # Construct URLs
-    short_url = f"{settings.BASE_URL}/l/{short_id}"
-    analytics_url = f"{settings.BASE_URL}/analytics/{short_id}?key={secret_key}"
-
-    return short_url, analytics_url
+    return short_code, analytics_secret

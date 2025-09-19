@@ -3,7 +3,7 @@ import os
 from app.core.db import clicks_table
 from app.core.settings import settings
 
-def log_click(short_id: str, request) -> None:
+def log_click(short_code: str, request) -> None:
     """
     Logs a click in the ClickLogs table.
     Minimal info: timestamp, IP, user-agent.
@@ -19,7 +19,7 @@ def log_click(short_id: str, request) -> None:
 
     # For simplicity, we store raw user-agent now
     item = {
-        "short_id": short_id,
+        "short_code": short_code,
         "click_timestamp": click_timestamp,
         "user_agent": user_agent,
         "client_ip": client_host

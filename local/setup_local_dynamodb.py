@@ -34,10 +34,10 @@ def create_links_table():
     dynamodb.create_table(
         TableName=table_name,
         KeySchema=[
-            {"AttributeName": "short_id", "KeyType": "HASH"},  # Partition key
+            {"AttributeName": "short_code", "KeyType": "HASH"},  # Partition key
         ],
         AttributeDefinitions=[
-            {"AttributeName": "short_id", "AttributeType": "S"},
+            {"AttributeName": "short_code", "AttributeType": "S"},
         ],
         BillingMode="PAY_PER_REQUEST",
     )
@@ -57,11 +57,11 @@ def create_clicklogs_table():
     dynamodb.create_table(
         TableName=table_name,
         KeySchema=[
-            {"AttributeName": "short_id", "KeyType": "HASH"},         # Partition key
+            {"AttributeName": "short_code", "KeyType": "HASH"},         # Partition key
             {"AttributeName": "click_timestamp", "KeyType": "RANGE"}  # Sort key
         ],
         AttributeDefinitions=[
-            {"AttributeName": "short_id", "AttributeType": "S"},
+            {"AttributeName": "short_code", "AttributeType": "S"},
             {"AttributeName": "click_timestamp", "AttributeType": "S"},
         ],
         BillingMode="PAY_PER_REQUEST",
