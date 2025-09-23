@@ -33,3 +33,16 @@ services:
       - ./.env
     depends_on:
       - dynamodb-local
+  
+  frontend:
+    build: ../frontend
+    container_name: frontend
+    ports:
+      - "${FRONTEND_PORT}:3000"
+    volumes:
+      - ../frontend/app:/home/   # Mount source for live reload
+      - /home/node_modules   # anonymous volume prevents host override
+    env_file:
+      - ./.env
+    depends_on:
+      - backend
