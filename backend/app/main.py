@@ -1,18 +1,18 @@
+import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 from app.routes import link_routes
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="LinkTrail API", version="0.1")
 
-origins = [
-    "https://skhbolla.github.io",
-    "http://localhost:3000",  # if you later use custom domain
-]
+#CORS middleware
+origins = os.getenv("ALLOWED_ORIGINS", "")
+allowed_origins = [origin.strip() for origin in origins.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,      # Don't use "*" in PRD
+    allow_origins=allowed_origins or ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -27,7 +27,7 @@ CI/CD pipelines should handle production deployments, so I never have to manuall
 * Hosted on GitHub Pages 
 
 **Infrastructure / CI-CD** 
-* AWS SAM templates for Lambda, API Gateway, and DynamoDB 
+* AWS SAM templates for Lambda, API Gateway (optional if we use lambda function URLs), and DynamoDB 
 * GitHub Actions for automated CI/CD
 * GitHub Secrets handle all production environment variables 
 
@@ -101,7 +101,7 @@ This structure keeps analytics scalable while allowing efficient queries for das
 
 ### Production (Serverless AWS) 
 * FastAPI running on Lambda (via Mangum) 
-* API Gateway for HTTP routing 
+* API Gateway or Lambda Function URLs for HTTP routing 
 * DynamoDB for links and click logs 
 * Frontend on GitHub Pages (might change later) 
 * CloudWatch logs for monitoring 
@@ -137,7 +137,7 @@ linktrail/
 │   └── Dockerfile                    # Frontend container
 
 ├── infra/                             # Production deployment
-│   ├── sam_template.yaml              # AWS Lambda + API Gateway + DynamoDB
+│   ├── sam_template.yaml              # AWS Lambda + API Gateway(optional) + DynamoDB
 │   ├── ci-deploy.yml                  # GitHub Actions workflow
 │   └── README.md
 
