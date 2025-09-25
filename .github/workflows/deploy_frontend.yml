@@ -23,18 +23,19 @@ jobs:
         with:
           node-version: 24
           cache: "npm"
+          cache-dependency-path: 'frontend/app/package-lock.json'
 
       # Step 3: Install dependencies inside frontend/app
       - name: Install dependencies
-        run: npm install
         working-directory: frontend/app
+        run: npm install
 
       # Step 4: Build React app with environment variables
       - name: Build React app
         env:
           REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
-        run: npm run build
         working-directory: frontend/app
+        run: npm run build
 
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
